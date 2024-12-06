@@ -1,13 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { DepartmentService } from './department.service';
-import { CreateDepartmentDto } from './dto/create.department.dto';
+import { DepartmentDto } from './dto/department.dto';
 
 @Controller('department')
 export class DepartmentController {
@@ -18,26 +19,23 @@ export class DepartmentController {
     return this.departmentService.getAll();
   }
 
-  @Get('one')
-  getOne(@Param('id', ParseUUIDPipe) id: string) {
+  @Get('one/:id')
+  getOne(@Param('id') id: string) {
     return this.departmentService.getOne(id);
   }
 
   @Post('create')
-  create(@Body() data: CreateDepartmentDto) {
+  create(@Body() data: DepartmentDto) {
     return this.departmentService.create(data);
   }
 
-  @Post('update/:id')
-  update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() data: CreateDepartmentDto,
-  ) {
+  @Put('update/:id')
+  update(@Param('id') id: string, @Body() data: DepartmentDto) {
     return this.departmentService.update(id, data);
   }
 
-  @Post('delete/:id')
-  delete(@Param('id', ParseUUIDPipe) id: string) {
+  @Delete('delete/:id')
+  delete(@Param('id') id: string) {
     return this.departmentService.delete(id);
   }
 }

@@ -1,27 +1,26 @@
-import { CreateDepartmentDto } from './dto/create.department.dto';
+import { DepartmentDto } from './dto/department.dto';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UpdateDepartmentDto } from './dto/update.department.dto';
 
 @Injectable()
 export class DepartmentService {
   constructor(private prismaService: PrismaService) {}
 
-  async getAll() {
+  async getAll(): Promise<DepartmentDto[]> {
     return this.prismaService.department.findMany();
   }
 
-  async getOne(id: string) {
+  async getOne(id: string): Promise<DepartmentDto> {
     return this.prismaService.department.findUnique({
       where: { id },
     });
   }
 
-  async create(data: CreateDepartmentDto) {
+  async create(data: DepartmentDto): Promise<DepartmentDto> {
     return this.prismaService.department.create({ data });
   }
 
-  async update(id: string, data: UpdateDepartmentDto) {
+  async update(id: string, data: DepartmentDto): Promise<DepartmentDto> {
     return this.prismaService.department.update({
       where: { id },
       data,
@@ -31,6 +30,20 @@ export class DepartmentService {
   async delete(id: string) {
     return this.prismaService.department.delete({
       where: { id },
+    });
+  }
+
+  async getTopDepartmentsWithMostEmployees() {
+    return this.prismaService.department.findMany({
+      take: 3,
+      orderBy: {
+        employees: {
+          _count: 'desc',
+        },
+      },
+      include: {
+        employees: true,
+      },
     });
   }
 }
