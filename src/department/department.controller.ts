@@ -24,6 +24,11 @@ export class DepartmentController {
     return this.departmentService.getOne(id);
   }
 
+  @Get('top')
+  getTopDepartmentsWithMostEmployees() {
+    return this.departmentService.getTopDepartmentsWithMostEmployees();
+  }
+
   @Post('create')
   create(@Body() data: DepartmentDto) {
     return this.departmentService.create(data);
